@@ -1,0 +1,69 @@
+//IMPLEMENTACION DEL RFID 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//RS485
+//// l código del transmisor es el siguiente:
+void setup() 
+{ 
+  Serial.begin(9600);
+} 
+ 
+void loop() 
+{ 
+  int lectura = analogRead(0);//leemos el valor del potenciómetro (de 0 a 1023) 
+  byte angulo= map(lectura, 0, 1023, 0, 180);     // escalamos la lectura a un valor de ángulo (entre 0 y 180) 
+  Serial.write(angulo); //enviamos el ángulo correspondiente
+  delay(50);                           
+} 
+///// Codigo del Receptor:
+#include <Servo.h> 
+ 
+Servo myservo;  // creamos el objeto servo 
+ 
+void setup() 
+{ 
+  Serial.begin(9600);  
+  myservo.attach(9);  // asignamos el pin 9 para el servo.
+} 
+ 
+void loop() 
+{ 
+  
+  if (Serial.available()) {
+    int angulo = Serial.read(); //Leemos el dato recibido 
+    if(angulo<=180) //verificamos que sea un valor en el rango del servo
+    {
+      myservo.write(angulo); //movemos el servomotor al ángulo correspondiente.
+    }
+  }
+} 
+
+
